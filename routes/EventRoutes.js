@@ -153,32 +153,42 @@ app.get('/api/events/givenreviews/:id', async (req, res) => {
 
 
 
-//Update Record
+//Update 
 app.put('/api/events/:id', (req, res) => {
-
-  const event = new eventModel({
-
-    eventName: req.body.eventName,
-    eventDate: req.body.eventDate,
-    city: req.body.city,
-    seat: req.body.seat,
-    desciription: req.body.desciription,
-    foodOption: req.body.foodOption,
-    restaurant: req.body.restaurant,
-    restaurantId: req.body.restaurantId,
-    eventPhoto: req.files.eventPhoto,
-    optionalImage: req.files.optionalImage
-  });
-
-
+console.log("************************")
   try {
-    eventModel.findByIdAndUpdate(req.params.id, event)
+    eventModel.findByIdAndUpdate(req.params.id, {
+      $set: {
+        eventName: req.body.eventName,
+        eventDate: req.body.eventDate,
+        city: req.body.city,
+        seat: req.body.seat,
+        desciription: req.body.desciription,
+        foodOption: req.body.foodOption,
+        restaurant: req.body.restaurant,
+        restaurantId: req.body.restaurantId,
+        eventPhoto: req.files.eventPhoto,
+        optionalImage: req.files.optionalImage
+
+      }
+    },
+      function (err, docs) {
+        if (err) {
+          console.log(err)
+        }
+        else {
+          console.log("Updated Event : ", docs)
+        }
+      }
+    )
+
     eventModel.save()
+
     res.send(event)
+
   } catch (err) {
     res.status(500).send(err)
   }
-
 
 })
 

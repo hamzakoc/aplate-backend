@@ -72,11 +72,18 @@ app.get('/api/restaurants/:id', async (req, res) => {
 //Update Record
 app.put('/api/restaurants/:id', (req, res) => {
 
+  const password = req.body.password;
+  const salt = bcrypt.genSaltSync(10);
+  const hash = bcrypt.hashSync(password, salt);
+
+
+
+
   try {
     restaurantModel.findByIdAndUpdate(req.params.id, {
       $set: {
         username: req.body.username,
-        password: req.body.password,
+        password: hash,
         fullName: req.body.fullName,
         address: req.body.address,
         city: req.body.city,
